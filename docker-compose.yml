@@ -1,0 +1,29 @@
+NodeJS-REST-API:
+    build: .
+    environment:
+        - NODE_ENV=local
+        - PORT=4000
+        - MONGO_HOST=localhost
+        - MONGO_PORT=27017
+        - MONGO_DB_NAME=API
+    ports:
+        - '4000:4000'
+    entrypoint:
+        - npm
+        - run
+        - start-dev
+    links:
+        - NodeJS-REST-API
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/node_modules
+    restart: on-failure
+
+localhost:
+    image: mongo:3.4
+    ports:
+        - '27017:27017'
+    volumes:
+        - ./db/backup:/data/configdb
+        - ./db/mongodb:/data/db
+    restart: on-failure
