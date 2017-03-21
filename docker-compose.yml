@@ -1,29 +1,64 @@
-NodeJS-REST-API:
+# node-js-restapi:
+#     build: .
+#     environment:
+#         - NODE_ENV=local
+#         - PORT=4000
+#         - MONGO_HOST=mongo
+#         - MONGO_PORT=27017
+#         - MONGO_DB_NAME=API
+#     ports:
+#         - '4000:4000'
+#         - '5858:5858'
+#     entrypoint:
+#         - npm
+#         - run
+#         - start
+#     links:
+#         - mongo
+#     volumes:
+#         - .:/usr/src/app
+#         - /usr/src/node_modules
+#     restart: on-failure
+
+# mongo:
+#     image: mongo:3.4
+#     ports:
+#         - '27017:27017'
+#     # volumes:
+#     #     - ./db/backup:/data/configdb
+#     #     - ./db/mongodb:/data/db
+#     restart: on-failure
+
+version: '3'
+services:
+  mongo:
+    image: mongo:3.4
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    networks:
+      - app-net
+  node-js-restapi:
     build: .
+    ports:
+      - '4000:4000'
+      - '5858:5858'
+    links:
+      - mongo
+    depends_on:
+      - mongo
     environment:
         - NODE_ENV=local
         - PORT=4000
-        - MONGO_HOST=localhost
+        - MONGO_HOST=mongo
         - MONGO_PORT=27017
         - MONGO_DB_NAME=API
-    ports:
-        - '4000:4000'
-    entrypoint:
-        - npm
-        - run
-        - start-dev
-    links:
-        - NodeJS-REST-API
-    volumes:
-        - .:/usr/src/app
-        - /usr/src/node_modules
-    restart: on-failure
-
-localhost:
-    image: mongo:3.4
-    ports:
-        - '27017:27017'
-    volumes:
-        - ./db/backup:/data/configdb
-        - ./db/mongodb:/data/db
-    restart: on-failure
+    networks:
+      - app-net
+volumes:
+  mongo-data:
+networks:
+  app-net:

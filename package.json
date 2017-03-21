@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./app",
-    "start-dev": "nodemon --watch app app/index.js | bunyan",
+    "start-dev": "nodemon --debug=5858 --legacy-watch app app/index.js | bunyan",
     "test": "./node_modules/mocha/bin/mocha 'app/**/*.spec.js' 'app/**/*.e2e.js'"
   },
   "repository": {
